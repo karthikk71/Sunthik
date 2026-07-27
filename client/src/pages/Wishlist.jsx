@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../api";
 
 function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
