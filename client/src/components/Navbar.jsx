@@ -12,6 +12,15 @@ import {
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    window.location.href = "/";
+  };
+
   return (
     <nav className="bg-[#131921] text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between gap-4">
@@ -63,20 +72,40 @@ function Navbar() {
             Orders
           </Link>
 
-          <Link
-            to="/profile"
-            className="flex items-center gap-2 hover:text-yellow-400"
-          >
-            <FaUser />
-            Profile
-          </Link>
+          {token && (
+            <Link
+              to="/profile"
+              className="flex items-center gap-2 hover:text-yellow-400"
+            >
+              <FaUser />
+              Profile
+            </Link>
+          )}
 
-          <Link
-            to="/login"
-            className="bg-yellow-400 text-black px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300"
-          >
-            Login
-          </Link>
+          {role === "admin" && (
+            <Link
+              to="/admin"
+              className="hover:text-yellow-400 font-semibold"
+            >
+              Admin
+            </Link>
+          )}
+
+          {!token ? (
+            <Link
+              to="/login"
+              className="bg-yellow-400 text-black px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300"
+            >
+              Login
+            </Link>
+          ) : (
+            <button
+              onClick={logout}
+              className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
+            >
+              Logout
+            </button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -119,13 +148,30 @@ function Navbar() {
             📦 Orders
           </Link>
 
-          <Link to="/profile" onClick={() => setMenuOpen(false)} className="block">
-            👤 Profile
-          </Link>
+          {token && (
+            <Link to="/profile" onClick={() => setMenuOpen(false)} className="block">
+              👤 Profile
+            </Link>
+          )}
 
-          <Link to="/login" onClick={() => setMenuOpen(false)} className="block">
-            🔑 Login
-          </Link>
+          {role === "admin" && (
+            <Link to="/admin" onClick={() => setMenuOpen(false)} className="block">
+              🛠️ Admin Dashboard
+            </Link>
+          )}
+
+          {!token ? (
+            <Link to="/login" onClick={() => setMenuOpen(false)} className="block">
+              🔑 Login
+            </Link>
+          ) : (
+            <button
+              onClick={logout}
+              className="block w-full text-left text-red-400"
+            >
+              🚪 Logout
+            </button>
+          )}
         </div>
       )}
     </nav>
