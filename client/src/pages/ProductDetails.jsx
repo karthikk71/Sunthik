@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../api";
+import toast from "react-hot-toast";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -14,12 +15,11 @@ function ProductDetails() {
 
   const fetchProduct = async () => {
     try {
-      const res = await axios.get(
-        `https://fakestoreapi.com/products/${id}`
-      );
+      const res = await axios.get(`/api/products/${id}`);
       setProduct(res.data);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load product");
     }
   };
 
@@ -28,7 +28,7 @@ function ProductDetails() {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        alert("Please login first");
+        toast.error("Please login first");
         return;
       }
 
@@ -48,10 +48,10 @@ function ProductDetails() {
         }
       );
 
-      alert(res.data.message);
+      toast.success(res.data.message);
     } catch (error) {
       console.log(error);
-      alert(error.response?.data?.message || "Failed to add to cart");
+      toast.error(error.response?.data?.message || "Failed to add to cart");
     }
   };
 
@@ -60,7 +60,7 @@ function ProductDetails() {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        alert("Please login first");
+        toast.error("Please login first");
         return;
       }
 
@@ -79,10 +79,12 @@ function ProductDetails() {
         }
       );
 
-      alert(res.data.message);
+      toast.success(res.data.message);
     } catch (error) {
       console.log(error);
-      alert(error.response?.data?.message || "Failed to add to wishlist");
+      toast.error(
+        error.response?.data?.message || "Failed to add to wishlist"
+      );
     }
   };
 
@@ -102,9 +104,8 @@ function ProductDetails() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-
         {/* Product Image */}
-        <div className="flex justify-center">
+        <div className="flex justify-center bg-gray-100 rounded-2xl p-8 shadow-md">
           <img
             src={product.image}
             alt={product.title}
@@ -114,9 +115,7 @@ function ProductDetails() {
 
         {/* Product Details */}
         <div>
-          <h1 className="text-4xl font-bold">
-            {product.title}
-          </h1>
+          <h1 className="text-4xl font-bold">{product.title}</h1>
 
           <p className="text-yellow-500 text-lg mt-3">
             ⭐ {product.rating?.rate} ({product.rating?.count} Reviews)
@@ -142,18 +141,16 @@ function ProductDetails() {
               onClick={() =>
                 setQuantity(quantity > 1 ? quantity - 1 : 1)
               }
-              className="bg-gray-300 px-4 py-2 rounded"
+              className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg"
             >
               -
             </button>
 
-            <span className="text-xl font-bold">
-              {quantity}
-            </span>
+            <span className="text-xl font-bold">{quantity}</span>
 
             <button
               onClick={() => setQuantity(quantity + 1)}
-              className="bg-gray-300 px-4 py-2 rounded"
+              className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg"
             >
               +
             </button>
@@ -161,28 +158,26 @@ function ProductDetails() {
 
           {/* Buttons */}
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
-
             <button
               onClick={handleAddToCart}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition"
+              className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-xl font-semibold transition"
             >
               🛒 Add to Cart
             </button>
 
             <button
               onClick={handleAddToWishlist}
-              className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold transition"
+              className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-xl font-semibold transition"
             >
               ❤️ Add to Wishlist
             </button>
 
             <button
               onClick={handleBuyNow}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold transition"
             >
               ⚡ Buy Now
             </button>
-
           </div>
         </div>
       </div>

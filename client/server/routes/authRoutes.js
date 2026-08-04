@@ -29,14 +29,15 @@ router.post("/register", async (req, res) => {
     });
 
     res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
+  success: true,
+  message: "User registered successfully",
+  user: {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  },
+});
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -68,21 +69,27 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+   const token = jwt.sign(
+  {
+    id: user._id,
+    role: user.role,
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: "7d",
+  }
+);
 
     res.status(200).json({
       success: true,
       message: "Login successful",
       token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
+     user: {
+     id: user._id,
+     name: user.name,
+     email: user.email,
+      role: user.role,
+},
     });
   } catch (error) {
     res.status(500).json({

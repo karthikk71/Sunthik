@@ -11,6 +11,8 @@ import Register from "./pages/Register";
 import ProductDetails from "./pages/ProductDetails";
 import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
+import Admin from "./pages/Admin";
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/admin" element={<ProtectedAdminRoute><Admin /></ProtectedAdminRoute>} />
         <Route path="/orders" element={<Orders />} />
       </Routes>
 
